@@ -14,7 +14,7 @@ const options = {
         description: 'Local development server',
       },
       {
-        url: 'https://your-production-domain.com/api', // optional production base path
+        url: 'https://doctor-appointment-server-jm1p.onrender.com/api', // optional production base path
         description: 'Production server',
       },
     ],
