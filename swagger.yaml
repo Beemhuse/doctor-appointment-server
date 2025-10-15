@@ -1,0 +1,581 @@
+# swagger.yaml
+openapi: 3.0.0
+info:
+  title: User Profile API
+  description: API for managing user profiles and medical information
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://api.example.com/api
+    description: Production server
+
+tags:
+  - name: Users
+    description: User profile management operations
+
+paths:
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get user profile by user ID
+      description: Retrieve complete user profile including basic information, contact details, and medical information
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique user ID from authentication system
+          schema:
+            type: string
+            example: "auth0|123456789"
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    put:
+      tags:
+        - Users
+      summary: Update complete user profile
+      description: Update all sections of the user profile including basic information, contact details, and medical information
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique user ID from authentication system
+          schema:
+            type: string
+            example: "auth0|123456789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+      responses:
+        '200':
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}/basic:
+    put:
+      tags:
+        - Users
+      summary: Update basic information
+      description: Update only the basic information section of the user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique user ID from authentication system
+          schema:
+            type: string
+            example: "auth0|123456789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicInfo'
+      responses:
+        '200':
+          description: Basic information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}/contact:
+    put:
+      tags:
+        - Users
+      summary: Update contact information
+      description: Update only the contact information section of the user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique user ID from authentication system
+          schema:
+            type: string
+            example: "auth0|123456789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactInfo'
+      responses:
+        '200':
+          description: Contact information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}/medical:
+    put:
+      tags:
+        - Users
+      summary: Update medical information
+      description: Update only the medical information section of the user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique user ID from authentication system
+          schema:
+            type: string
+            example: "auth0|123456789"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicalInfo'
+      responses:
+        '200':
+          description: Medical information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "User not found"
+
+    BasicInfo:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - biologicalSex
+        - birthday
+      properties:
+        firstName:
+          type: string
+          description: User's first name
+          example: "Tristan Peter"
+        lastName:
+          type: string
+          description: User's last name
+          example: "Marcelino"
+        biologicalSex:
+          type: string
+          enum: [male, female, other]
+          description: Biological sex
+          example: "male"
+        preferredPronouns:
+          type: string
+          description: Preferred pronouns
+          example: "Helvim"
+        birthday:
+          type: string
+          format: date
+          description: Date of birth (YYYY-MM-DD)
+          example: "1990-01-01"
+        height:
+          $ref: '#/components/schemas/Height'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        bloodType:
+          type: string
+          enum: [A+, A-, B+, B-, AB+, AB-, O+, O-]
+          description: Blood type
+          example: "A+"
+
+    ContactInfo:
+      type: object
+      required:
+        - mobileNumber1
+        - addressLine1
+        - country
+      properties:
+        mobileNumber1:
+          type: string
+          description: Primary mobile number
+          example: "+63 9175045005"
+        mobileNumber2:
+          type: string
+          description: Secondary mobile number
+          example: "(Area Code) 000-0000-000"
+        addressLine1:
+          type: string
+          description: Primary address line
+          example: "123 Main Street"
+        addressLine2:
+          type: string
+          description: Secondary address line
+          example: "Apt 4B"
+        country:
+          type: string
+          description: Country of residence
+          example: "United States of America"
+        state:
+          type: string
+          description: State/Province
+          example: "California"
+
+    MedicalInfo:
+      type: object
+      properties:
+        medicalConditions:
+          type: array
+          description: List of medical conditions
+          items:
+            $ref: '#/components/schemas/MedicalCondition'
+        allergies:
+          type: array
+          description: List of allergies
+          items:
+            $ref: '#/components/schemas/Allergy'
+        currentMedications:
+          type: array
+          description: List of current medications
+          items:
+            $ref: '#/components/schemas/Medication'
+        medicalOperations:
+          type: array
+          description: List of past medical operations
+          items:
+            $ref: '#/components/schemas/MedicalOperation'
+        patientNotes:
+          type: array
+          description: Important patient notes and directives
+          items:
+            $ref: '#/components/schemas/PatientNote'
+
+    UserProfile:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Sanity document ID
+          example: "user-123"
+        userId:
+          type: string
+          description: Authentication system user ID
+          example: "auth0|123456789"
+        firstName:
+          type: string
+          example: "Tristan Peter"
+        lastName:
+          type: string
+          example: "Marcelino"
+        biologicalSex:
+          type: string
+          example: "male"
+        preferredPronouns:
+          type: string
+          example: "Helvim"
+        birthday:
+          type: string
+          format: date
+          example: "1990-01-01"
+        height:
+          $ref: '#/components/schemas/Height'
+        weight:
+          $ref: '#/components/schemas/Weight'
+        bloodType:
+          type: string
+          example: "A+"
+        contactInfo:
+          $ref: '#/components/schemas/ContactInfo'
+        medicalConditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MedicalCondition'
+        allergies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Allergy'
+        currentMedications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Medication'
+        medicalOperations:
+          type: array
+          items:
+            $ref: '#/components/schemas/MedicalOperation'
+        patientNotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatientNote'
+
+    Height:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Height value
+          example: 180
+        unit:
+          type: string
+          enum: [cm, ft_in]
+          description: Height unit
+          example: "cm"
+        feet:
+          type: number
+          description: Feet component (if using ft_in)
+          example: 5
+        inches:
+          type: number
+          description: Inches component (if using ft_in)
+          example: 11
+
+    Weight:
+      type: object
+      properties:
+        value:
+          type: number
+          description: Weight value
+          example: 59
+        unit:
+          type: string
+          enum: [kg, lbs]
+          description: Weight unit
+          example: "kg"
+
+    MedicalCondition:
+      type: object
+      required:
+        - condition
+      properties:
+        condition:
+          type: string
+          description: Name of the medical condition
+          example: "Hypertension"
+        diagnosisDate:
+          type: string
+          format: date
+          description: Date of diagnosis
+          example: "2020-03-15"
+        severity:
+          type: string
+          enum: [mild, moderate, severe]
+          description: Severity of the condition
+          example: "moderate"
+        isActive:
+          type: boolean
+          description: Whether the condition is currently active
+          example: true
+        notes:
+          type: string
+          description: Additional notes about the condition
+          example: "Controlled with medication"
+
+    Allergy:
+      type: object
+      required:
+        - allergen
+      properties:
+        allergen:
+          type: string
+          description: Substance causing the allergy
+          example: "Penicillin"
+        reaction:
+          type: string
+          description: Allergic reaction description
+          example: "Rash and swelling"
+        severity:
+          type: string
+          enum: [mild, moderate, severe, life_threatening]
+          description: Severity of the allergy
+          example: "severe"
+        notes:
+          type: string
+          description: Additional notes about the allergy
+          example: "Avoid all penicillin-based antibiotics"
+
+    Medication:
+      type: object
+      required:
+        - medication
+      properties:
+        medication:
+          type: string
+          description: Name of the medication
+          example: "Lisinopril"
+        dosage:
+          type: string
+          description: Medication dosage
+          example: "10mg"
+        frequency:
+          type: string
+          description: How often the medication is taken
+          example: "Once daily"
+        purpose:
+          type: string
+          description: Reason for taking the medication
+          example: "Blood pressure control"
+        startDate:
+          type: string
+          format: date
+          description: When the medication was started
+          example: "2020-03-20"
+        prescribingDoctor:
+          type: string
+          description: Doctor who prescribed the medication
+          example: "Dr. Smith"
+        notes:
+          type: string
+          description: Additional notes about the medication
+          example: "Take with food"
+
+    MedicalOperation:
+      type: object
+      required:
+        - operation
+        - date
+      properties:
+        operation:
+          type: string
+          description: Name of the operation
+          example: "Appendectomy"
+        date:
+          type: string
+          format: date
+          description: Date of the operation
+          example: "2015-07-10"
+        surgeon:
+          type: string
+          description: Surgeon or hospital where performed
+          example: "General Hospital"
+        reason:
+          type: string
+          description: Reason for the operation
+          example: "Acute appendicitis"
+        outcome:
+          type: string
+          description: Outcome of the operation
+          example: "Successful, full recovery"
+        notes:
+          type: string
+          description: Additional notes about the operation
+          example: "No complications"
+
+    PatientNote:
+      type: object
+      required:
+        - category
+        - title
+        - description
+      properties:
+        category:
+          type: string
+          enum: [genetic, certification, dnr, advance_directive, other]
+          description: Category of the note
+          example: "dnr"
+        title:
+          type: string
+          description: Title of the note
+          example: "Do Not Resuscitate Order"
+        description:
+          type: string
+          description: Detailed description
+          example: "Patient has signed DNR order. Do not perform CPR in case of cardiac arrest."
+        dateRecorded:
+          type: string
+          format: date
+          description: When the note was recorded
+          example: "2023-01-15"
+        isActive:
+          type: boolean
+          description: Whether the note is currently active/valid
+          example: true
+        attachments:
+          type: array
+          description: File attachments
+          items:
+            type: object
+            properties:
+              _type:
+                type: string
+                example: "file"
+              asset:
+                type: object
+                properties:
+                  _ref:
+                    type: string
+                    example: "file-123"
+                  _type:
+                    type: string
+                    example: "reference"
