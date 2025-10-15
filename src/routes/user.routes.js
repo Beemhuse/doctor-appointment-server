@@ -27,17 +27,13 @@ router.use(authenticate);
  *     BasicInfo:
  *       type: object
  *       required:
- *         - firstName
- *         - lastName
+ *         - name
  *         - biologicalSex
  *         - birthday
  *       properties:
- *         firstName:
+ *         name:
  *           type: string
  *           example: "Tristan Peter"
- *         lastName:
- *           type: string
- *           example: "Marcelino"
  *         biologicalSex:
  *           type: string
  *           enum: [male, female, other]
@@ -288,7 +284,7 @@ router.use(authenticate);
 
 /**
  * @swagger
- * /users/{userId}:
+ * /users/:
  *   get:
  *     summary: Get user profile by user ID
  *     tags: [Users]
@@ -320,11 +316,11 @@ router.use(authenticate);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:userId', getUserByUserId)
+router.get('/me', getUserByUserId)
 
 /**
  * @swagger
- * /users/{userId}/medical:
+ * /users/medical:
  *   put:
  *     summary: Update medical information
  *     tags: [Users]
@@ -380,11 +376,11 @@ router.get('/:userId', getUserByUserId)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:userId/medical', updateUserMedicalInfo)
+router.put('/medical', updateUserMedicalInfo)
 
 /**
  * @swagger
- * /users/{userId}/basic:
+ * /users/basic:
  *   put:
  *     summary: Update basic information
  *     tags: [Users]
@@ -434,11 +430,11 @@ router.put('/:userId/medical', updateUserMedicalInfo)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:userId/basic', updateUserBasicInfo)
+router.put('/basic', updateUserBasicInfo)
 
 /**
  * @swagger
- * /users/{userId}/contact:
+ * /users/contact:
  *   put:
  *     summary: Update contact information
  *     tags: [Users]
@@ -482,11 +478,11 @@ router.put('/:userId/basic', updateUserBasicInfo)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:userId/contact', updateUserContactInfo)
+router.put('/contact', updateUserContactInfo)
 
 /**
  * @swagger
- * /users/{userId}:
+ * /users/:
  *   put:
  *     summary: Update entire user profile
  *     tags: [Users]
@@ -552,6 +548,6 @@ router.put('/:userId/contact', updateUserContactInfo)
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:userId', updateUserProfile)
+router.put('/', updateUserProfile)
 
 export default router
