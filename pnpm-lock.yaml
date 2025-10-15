@@ -11,6 +11,9 @@ importers:
       '@sanity/client':
         specifier: ^7.12.0
         version: 7.12.0(debug@4.4.3)
+      '@sanity/image-url':
+        specifier: ^1.2.0
+        version: 1.2.0
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -23,6 +26,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.21.2
+      install:
+        specifier: ^0.13.0
+        version: 0.13.0
       jsonwebtoken:
         specifier: ^9.0.0
         version: 9.0.2
@@ -2853,6 +2859,10 @@ packages:
     peerDependenciesMeta:
       '@types/node':
         optional: true
+
+  install@0.13.0:
+    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
+    engines: {node: '>= 0.10'}
 
   ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
@@ -7980,6 +7990,8 @@ snapshots:
       rxjs: 7.8.2
     optionalDependencies:
       '@types/node': 24.7.0
+
+  install@0.13.0: {}
 
   ipaddr.js@1.9.1: {}
 
