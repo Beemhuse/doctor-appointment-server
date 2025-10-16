@@ -124,7 +124,7 @@ router.post("/", createDoctor);
  *       404:
  *         description: Doctor not found
  */
-router.put("/:doctorId", updateDoctor);
+router.put("/:id", updateDoctor);
 
 /**
  * @swagger
