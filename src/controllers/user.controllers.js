@@ -1,5 +1,6 @@
 // controllers/userController.js
-import client from '../lib/sanityClient.js'
+
+import { client } from "../client.js"
 
 // Get user by userId (auth ID)
 export const getUserByUserId = async (req, res) => {

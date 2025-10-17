@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import authRoutes from './routes/auth.routes.js';
 import appointmentRoutes from './routes/appointment.routes.js';
 import doctorRoutes from './routes/doctor.routes.js';
+import userRoutes from './routes/user.routes.js';
 import { swaggerSpec } from './swagger.js';
 
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
+app.use('/api/users', userRoutes);
 
 
 // Swagger
