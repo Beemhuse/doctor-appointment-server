@@ -66,8 +66,7 @@
       <section class="bg-white p-4 rounded shadow">
         <h3 class="font-semibold mb-2">Update Basic Info</h3>
         <form id="basicForm" class="space-y-2">
-          <label class="block"><span class="text-sm">First name</span><input name="firstName" class="border rounded px-2 py-1 w-full"/></label>
-          <label class="block"><span class="text-sm">Last name</span><input name="lastName" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">name</span><input name="name" class="border rounded px-2 py-1 w-full"/></label>
           <label class="block"><span class="text-sm">Biological sex</span><input name="biologicalSex" class="border rounded px-2 py-1 w-full"/></label>
           <label class="block"><span class="text-sm">Preferred pronouns</span><input name="preferredPronouns" class="border rounded px-2 py-1 w-full"/></label>
           <label class="block"><span class="text-sm">Birthday (YYYY-MM-DD)</span><input name="birthday" class="border rounded px-2 py-1 w-full"/></label>
@@ -185,8 +184,7 @@
     async function submitBasic() {
       const f = document.forms.basicForm;
       const body = {
-        firstName: f.firstName.value || null,
-        lastName: f.lastName.value || null,
+        name: f.name.value || null,
         biologicalSex: f.biologicalSex.value || null,
         preferredPronouns: f.preferredPronouns.value || null,
         birthday: f.birthday.value || null,
@@ -194,7 +192,7 @@
         weight: f.weight.value || null,
         bloodType: f.bloodType.value || null
       };
-      await apiFetch("/user/basic", { method: "PATCH", body: JSON.stringify(body) });
+      await apiFetch("/user/basic", { method: "PUT", body: JSON.stringify(body) });
       await getProfile();
     }
 
@@ -225,7 +223,7 @@
         responseView.textContent = "Invalid JSON in full profile input.";
         return;
       }
-      await apiFetch("/user/profile", { method: "PATCH", body: JSON.stringify(parsed) });
+      await apiFetch("/user/", { method: "PUT", body: JSON.stringify(parsed) });
       await getProfile();
     }
 
@@ -251,8 +249,7 @@
     function prefillBasic() {
       const p = getFetchedProfile();
       const f = document.forms.basicForm;
-      f.firstName.value = p.firstName || "";
-      f.lastName.value = p.lastName || "";
+      f.name.value = p.name || "";
       f.biologicalSex.value = p.biologicalSex || "";
       f.preferredPronouns.value = p.preferredPronouns || "";
       f.birthday.value = p.birthday || "";
