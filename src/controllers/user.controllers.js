@@ -7,10 +7,10 @@ export const getUserProfile = async (req, res) => {
     const { id } = req.user  // Extracted from the token (middleware)
     console.log(id)
 
-    const query = `*[_type == "user" && id == $id][0]{
+    const query = `*[_type == "user" && _id == $id][0]{
       _id,
-      firstName,
-      lastName,
+      name,
+      email,
       biologicalSex,
       preferredPronouns,
       birthday, 
@@ -38,11 +38,11 @@ console.log(user)
 // Update user medical information
 export const updateUserMedicalInfo = async (req, res) => {
   try {
-    const { userId } = req.user
+    const { id } = req.user
     const medicalData = req.body
 
-    const query = `*[_type == "user" && userId == $userId][0]{ _id }`
-    const user = await client.fetch(query, { userId })
+    const query = `*[_type == "user" && _id == $id][0]{ _id }`
+    const user = await client.fetch(query, { id })
 
     if (!user) return res.status(404).json({ error: "User not found" })
 
@@ -66,11 +66,11 @@ export const updateUserMedicalInfo = async (req, res) => {
 // Update user basic information
 export const updateUserBasicInfo = async (req, res) => {
   try {
-    const { userId } = req.user
+    const { id } = req.user
     const basicData = req.body
 
-    const query = `*[_type == "user" && userId == $userId][0]{ _id }`
-    const user = await client.fetch(query, { userId })
+    const query = `*[_type == "user" && _id == $id][0]{ _id }`
+    const user = await client.fetch(query, { id })
 
     if (!user) return res.status(404).json({ error: "User not found" })
 
@@ -97,11 +97,11 @@ export const updateUserBasicInfo = async (req, res) => {
 // Update user contact information
 export const updateUserContactInfo = async (req, res) => {
   try {
-    const { userId } = req.user
+    const { id } = req.user
     const contactData = req.body
 
-    const query = `*[_type == "user" && userId == $userId][0]{ _id }`
-    const user = await client.fetch(query, { userId })
+    const query = `*[_type == "user" && _id == $id][0]{ _id }`
+    const user = await client.fetch(query, { id })
 
     if (!user) return res.status(404).json({ error: "User not found" })
 
@@ -128,11 +128,11 @@ export const updateUserContactInfo = async (req, res) => {
 // Complete user profile update (all sections)
 export const updateUserProfile = async (req, res) => {
   try {
-    const { userId } = req.user
+    const { id } = req.user
     const profileData = req.body
 
-    const query = `*[_type == "user" && userId == $userId][0]{ _id }`
-    const user = await client.fetch(query, { userId })
+    const query = `*[_type == "user" && _id == $id][0]{ _id }`
+    const user = await client.fetch(query, { id })
 
     if (!user) return res.status(404).json({ error: "User not found" })
 
