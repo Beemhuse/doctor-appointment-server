@@ -106,15 +106,11 @@ export const getAllDoctors = async (req, res) => {
       _id,
       name,
       image,
+      hospital,
       specialization,
       yearsOfExperience,
       expertise,
       contact,
-      availability,
-      consultationFee,
-      rating,
-      about,
-      education,
       isActive,
       slug
     }`;
