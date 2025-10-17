@@ -478,8 +478,7 @@ router.put('/contact', updateUserContactInfo)
  *           schema:
  *             $ref: '#/components/schemas/UserProfile'
  *           example:
- *             firstName: "Tristan Peter"
- *             lastName: "Marcelino"
+ *             name: "Tristan Peter"
  *             biologicalSex: "male"
  *             preferredPronouns: "Helvim"
  *             birthday: "1990-01-01"
