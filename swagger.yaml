@@ -19,7 +19,7 @@ tags:
     description: User profile management operations
 
 paths:
-  /users/{userId}:
+  /api/users/:
     get:
       tags:
         - Users
@@ -92,7 +92,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/{userId}/basic:
+  /api/users/basic:
     put:
       tags:
         - Users
@@ -132,7 +132,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/{userId}/contact:
+  /api/users/contact:
     put:
       tags:
         - Users
@@ -172,7 +172,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/{userId}/medical:
+  /api/users/medical:
     put:
       tags:
         - Users

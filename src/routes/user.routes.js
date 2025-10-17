@@ -1,11 +1,11 @@
 // routes/userRoutes.js
 import express from 'express'
 import {
-  getUserByUserId,
   updateUserMedicalInfo,
   updateUserBasicInfo,
   updateUserContactInfo,
-  updateUserProfile
+  updateUserProfile,
+  getUserProfile
 } from '../controllers/user.controllers.js'
 import { authenticate } from '../middleware/auth.middleware.js';
 
@@ -284,18 +284,10 @@ router.use(authenticate);
 
 /**
  * @swagger
- * /users/:
+ * /user/me:
  *   get:
  *     summary: Get user profile by user ID
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: string
- *         example: "auth0|123456789"
- *         description: Unique user ID from authentication system
  *     responses:
  *       200:
  *         description: User profile retrieved successfully
@@ -316,21 +308,14 @@ router.use(authenticate);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/me', getUserByUserId)
+router.get('/me',authenticate, getUserProfile)
 
 /**
  * @swagger
- * /users/medical:
+ * /user/medical:
  *   put:
  *     summary: Update medical information
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: string
- *         example: "auth0|123456789"
  *     requestBody:
  *       required: true
  *       content:
@@ -380,17 +365,10 @@ router.put('/medical', updateUserMedicalInfo)
 
 /**
  * @swagger
- * /users/basic:
+ * /user/basic:
  *   put:
  *     summary: Update basic information
  *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: string
- *         example: "auth0|123456789"
  *     requestBody:
  *       required: true
  *       content:
@@ -434,7 +412,7 @@ router.put('/basic', updateUserBasicInfo)
 
 /**
  * @swagger
- * /users/contact:
+ * /user/contact:
  *   put:
  *     summary: Update contact information
  *     tags: [Users]
@@ -482,7 +460,7 @@ router.put('/contact', updateUserContactInfo)
 
 /**
  * @swagger
- * /users/:
+ * /user/:
  *   put:
  *     summary: Update entire user profile
  *     tags: [Users]

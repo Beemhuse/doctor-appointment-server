@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>User Profile Admin — Localhost 4000</title>
+  <!-- Tailwind CDN for quick styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen p-6">
+  <div class="max-w-5xl mx-auto space-y-6">
+    <header class="flex items-center justify-between">
+      <h1 class="text-2xl font-semibold">User Profile Tester — http://localhost:4000</h1>
+      <div class="flex items-center gap-2">
+        <input id="tokenInput" type="text" placeholder="Bearer token (JWT)"
+               class="border rounded px-3 py-2 w-96" />
+        <button id="getProfileBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Get Profile</button>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Profile viewer -->
+      <section class="bg-white p-4 rounded shadow">
+        <h2 class="font-medium mb-2">Profile (fetched)</h2>
+        <pre id="profileView" class="bg-slate-100 p-3 rounded h-64 overflow-auto text-sm"></pre>
+      </section>
+
+      <!-- Response viewer -->
+      <section class="bg-white p-4 rounded shadow">
+        <h2 class="font-medium mb-2">Last Response</h2>
+        <pre id="responseView" class="bg-slate-100 p-3 rounded h-64 overflow-auto text-sm"></pre>
+      </section>
+
+      <!-- Update Medical Info -->
+      <section class="bg-white p-4 rounded shadow">
+        <h3 class="font-semibold mb-2">Update Medical Info</h3>
+        <form id="medicalForm" class="space-y-2">
+          <label class="block">
+            <span class="text-sm">Medical Conditions (comma separated)</span>
+            <input name="medicalConditions" class="border rounded px-2 py-1 w-full"/>
+          </label>
+          <label class="block">
+            <span class="text-sm">Allergies (comma separated)</span>
+            <input name="allergies" class="border rounded px-2 py-1 w-full"/>
+          </label>
+          <label class="block">
+            <span class="text-sm">Current Medications (comma separated)</span>
+            <input name="currentMedications" class="border rounded px-2 py-1 w-full"/>
+          </label>
+          <label class="block">
+            <span class="text-sm">Medical Operations (comma separated)</span>
+            <input name="medicalOperations" class="border rounded px-2 py-1 w-full"/>
+          </label>
+          <label class="block">
+            <span class="text-sm">Patient Notes</span>
+            <textarea name="patientNotes" rows="3" class="border rounded px-2 py-1 w-full"></textarea>
+          </label>
+          <div class="flex gap-2">
+            <button type="button" onclick="submitMedical()" class="bg-green-600 text-white px-3 py-1 rounded">Submit Medical</button>
+            <button type="button" onclick="prefillMedical()" class="bg-gray-200 px-3 py-1 rounded">Prefill from Profile</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Update Basic Info -->
+      <section class="bg-white p-4 rounded shadow">
+        <h3 class="font-semibold mb-2">Update Basic Info</h3>
+        <form id="basicForm" class="space-y-2">
+          <label class="block"><span class="text-sm">First name</span><input name="firstName" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Last name</span><input name="lastName" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Biological sex</span><input name="biologicalSex" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Preferred pronouns</span><input name="preferredPronouns" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Birthday (YYYY-MM-DD)</span><input name="birthday" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Height</span><input name="height" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Weight</span><input name="weight" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Blood type</span><input name="bloodType" class="border rounded px-2 py-1 w-full"/></label>
+          <div class="flex gap-2">
+            <button type="button" onclick="submitBasic()" class="bg-green-600 text-white px-3 py-1 rounded">Submit Basic</button>
+            <button type="button" onclick="prefillBasic()" class="bg-gray-200 px-3 py-1 rounded">Prefill</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Update Contact Info -->
+      <section class="bg-white p-4 rounded shadow">
+        <h3 class="font-semibold mb-2">Update Contact Info</h3>
+        <form id="contactForm" class="space-y-2">
+          <label class="block"><span class="text-sm">Mobile Number 1</span><input name="mobileNumber1" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Mobile Number 2</span><input name="mobileNumber2" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Address Line 1</span><input name="addressLine1" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Address Line 2</span><input name="addressLine2" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">Country</span><input name="country" class="border rounded px-2 py-1 w-full"/></label>
+          <label class="block"><span class="text-sm">State</span><input name="state" class="border rounded px-2 py-1 w-full"/></label>
+          <div class="flex gap-2">
+            <button type="button" onclick="submitContact()" class="bg-green-600 text-white px-3 py-1 rounded">Submit Contact</button>
+            <button type="button" onclick="prefillContact()" class="bg-gray-200 px-3 py-1 rounded">Prefill</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Update Full Profile -->
+      <section class="bg-white p-4 rounded shadow md:col-span-2">
+        <h3 class="font-semibold mb-2">Update Full Profile (send entire JSON)</h3>
+        <p class="text-sm text-slate-600 mb-2">Paste full profile JSON you want to set (will be sent as PATCH body to `/user/profile`).</p>
+        <textarea id="fullProfileInput" rows="6" class="w-full border rounded p-2 bg-slate-50"></textarea>
+        <div class="flex gap-2 mt-2">
+          <button onclick="submitFullProfile()" class="bg-purple-600 text-white px-3 py-1 rounded">Submit Full Profile</button>
+          <button onclick="setFullProfileFromFetched()" class="bg-gray-200 px-3 py-1 rounded">Use Fetched Profile</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="text-sm text-slate-500">
+      Note: Endpoints used by this template (modify if your routes differ):
+      <ul class="list-disc ml-6">
+        <li><code>GET http://localhost:4000/user/profile</code></li>
+        <li><code>PATCH http://localhost:4000/user/medical</code></li>
+        <li><code>PATCH http://localhost:4000/user/basic</code></li>
+        <li><code>PATCH http://localhost:4000/user/contact</code></li>
+        <li><code>PATCH http://localhost:4000/user/profile</code> (full profile update)</li>
+      </ul>
+    </footer>
+  </div>
+
+  <script>
+    const BASE = "http://localhost:4000/api";
+    const profileView = document.getElementById("profileView");
+    const responseView = document.getElementById("responseView");
+    const tokenInput = document.getElementById("tokenInput");
+    const getProfileBtn = document.getElementById("getProfileBtn");
+
+    async function apiFetch(path, opts = {}) {
+      const token = tokenInput.value?.trim();
+      const headers = opts.headers || {};
+      headers["Content-Type"] = headers["Content-Type"] || "application/json";
+      if (token) headers["Authorization"] = token.startsWith("Bearer ") ? token : "Bearer " + token;
+      try {
+        const res = await fetch(BASE + path, { ...opts, headers });
+        const text = await res.text();
+        let body;
+        try { body = JSON.parse(text); } catch (e) { body = text; }
+        const out = { status: res.status, ok: res.ok, body };
+        responseView.textContent = JSON.stringify(out, null, 2);
+        if (!res.ok) throw out;
+        return body;
+      } catch (err) {
+        responseView.textContent = JSON.stringify(err, null, 2);
+        throw err;
+      }
+    }
+
+    // Get profile and populate viewer + forms
+    async function getProfile() {
+      try {
+        const data = await apiFetch("/user/me", { method: "GET" });
+        profileView.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        // already shown in responseView
+      }
+    }
+
+    getProfileBtn.addEventListener("click", getProfile);
+
+    // Helpers: parse comma-separated input into array
+    function csvToArray(value) {
+      if (!value) return [];
+      return value.split(",").map(s => s.trim()).filter(Boolean);
+    }
+
+    // Medical submit
+    async function submitMedical() {
+      const f = document.forms.medicalForm;
+      const body = {
+        medicalConditions: csvToArray(f.medicalConditions.value),
+        allergies: csvToArray(f.allergies.value),
+        currentMedications: csvToArray(f.currentMedications.value),
+        medicalOperations: csvToArray(f.medicalOperations.value),
+        patientNotes: f.patientNotes.value ? [f.patientNotes.value] : []
+      };
+      await apiFetch("/user/medical", { method: "PATCH", body: JSON.stringify(body) });
+      await getProfile();
+    }
+
+    // Basic submit
+    async function submitBasic() {
+      const f = document.forms.basicForm;
+      const body = {
+        firstName: f.firstName.value || null,
+        lastName: f.lastName.value || null,
+        biologicalSex: f.biologicalSex.value || null,
+        preferredPronouns: f.preferredPronouns.value || null,
+        birthday: f.birthday.value || null,
+        height: f.height.value || null,
+        weight: f.weight.value || null,
+        bloodType: f.bloodType.value || null
+      };
+      await apiFetch("/user/basic", { method: "PATCH", body: JSON.stringify(body) });
+      await getProfile();
+    }
+
+    // Contact submit
+    async function submitContact() {
+      const f = document.forms.contactForm;
+      const body = {
+        contactInfo: {
+          mobileNumber1: f.mobileNumber1.value || null,
+          mobileNumber2: f.mobileNumber2.value || null,
+          addressLine1: f.addressLine1.value || null,
+          addressLine2: f.addressLine2.value || null,
+          country: f.country.value || null,
+          state: f.state.value || null
+        }
+      };
+      await apiFetch("/user/contact", { method: "PATCH", body: JSON.stringify(body) });
+      await getProfile();
+    }
+
+    // Full profile submit (sends whatever JSON is in textarea)
+    async function submitFullProfile() {
+      const raw = document.getElementById("fullProfileInput").value;
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e) {
+        responseView.textContent = "Invalid JSON in full profile input.";
+        return;
+      }
+      await apiFetch("/user/profile", { method: "PATCH", body: JSON.stringify(parsed) });
+      await getProfile();
+    }
+
+    // Prefill helpers (use data in profileView)
+    function getFetchedProfile() {
+      try {
+        return JSON.parse(profileView.textContent || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function prefillMedical() {
+      const p = getFetchedProfile();
+      const f = document.forms.medicalForm;
+      f.medicalConditions.value = (p.medicalConditions || []).join(", ");
+      f.allergies.value = (p.allergies || []).join(", ");
+      f.currentMedications.value = (p.currentMedications || []).join(", ");
+      f.medicalOperations.value = (p.medicalOperations || []).join(", ");
+      f.patientNotes.value = (p.patientNotes || []).join("\\n");
+    }
+
+    function prefillBasic() {
+      const p = getFetchedProfile();
+      const f = document.forms.basicForm;
+      f.firstName.value = p.firstName || "";
+      f.lastName.value = p.lastName || "";
+      f.biologicalSex.value = p.biologicalSex || "";
+      f.preferredPronouns.value = p.preferredPronouns || "";
+      f.birthday.value = p.birthday || "";
+      f.height.value = p.height || "";
+      f.weight.value = p.weight || "";
+      f.bloodType.value = p.bloodType || "";
+    }
+
+    function prefillContact() {
+      const p = getFetchedProfile();
+      const f = document.forms.contactForm;
+      const c = p.contactInfo || {};
+      f.mobileNumber1.value = c.mobileNumber1 || "";
+      f.mobileNumber2.value = c.mobileNumber2 || "";
+      f.addressLine1.value = c.addressLine1 || "";
+      f.addressLine2.value = c.addressLine2 || "";
+      f.country.value = c.country || "";
+      f.state.value = c.state || "";
+    }
+
+    function setFullProfileFromFetched() {
+      const p = getFetchedProfile();
+      document.getElementById("fullProfileInput").value = JSON.stringify(p, null, 2);
+    }
+
+    // Auto-attempt to fetch on load if token present
+    window.addEventListener("load", () => {
+      // optional: uncomment to auto-get profile if token present
+      // if (tokenInput.value.trim()) getProfile();
+    });
+  </script>
+</body>
+</html>

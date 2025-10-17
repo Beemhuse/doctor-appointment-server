@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/auth/signup:
+ * /auth/signup:
  *   post:
  *     summary: Register a new user (patient or doctor)
  *     tags: [Auth]
@@ -53,7 +53,7 @@ router.post("/signup", signup);
 
 /**
  * @swagger
- * /api/auth/login:
+ * /auth/login:
  *   post:
  *     summary: Log in an existing user
  *     tags: [Auth]

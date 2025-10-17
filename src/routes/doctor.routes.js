@@ -19,7 +19,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/doctors:
+ * /doctors:
  *   get:
  *     summary: Get all doctors
  *     tags: [Doctors]
@@ -33,7 +33,7 @@ router.get("/", getAllDoctors);
 
 /**
  * @swagger
- * /api/doctors/{doctorId}:
+ * /doctors/{doctorId}:
  *   get:
  *     summary: Get a doctor by ID
  *     tags: [Doctors]
@@ -58,7 +58,7 @@ router.use(authenticate);
 
 /**
  * @swagger
- * /api/doctors:
+ * /doctors:
  *   post:
  *     summary: Create a new doctor
  *     tags: [Doctors]
@@ -93,7 +93,7 @@ router.post("/", createDoctor);
 
 /**
  * @swagger
- * /api/doctors/{doctorId}:
+ * /doctors/{doctorId}:
  *   put:
  *     summary: Update doctor information
  *     tags: [Doctors]
@@ -128,7 +128,7 @@ router.put("/:id", updateDoctor);
 
 /**
  * @swagger
- * /api/doctors/{doctorId}:
+ * /doctors/{doctorId}:
  *   delete:
  *     summary: Delete a doctor
  *     tags: [Doctors]

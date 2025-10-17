@@ -15,6 +15,7 @@ if (type !== 'Bearer' || !token) return res.status(401).json({ message: 'Invalid
 try {
 const payload = jwt.verify(token, process.env.JWT_SECRET);
 req.user = payload; // { id: '<sanityDocId>', role: 'patient' }
+console.log(req.user)
 next();
 } catch (err) {
 return res.status(401).json({ message: 'Invalid or expired token' });

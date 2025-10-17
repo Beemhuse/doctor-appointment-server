@@ -1,18 +1,19 @@
 // controllers/userController.js
-
 import { client } from "../client.js"
 
-// Get user by userId (auth ID)
-export const getUserByUserId = async (req, res) => {
+// Get user by authenticated token
+export const getUserProfile = async (req, res) => {
   try {
-    const { userId } = req.params
-    const query = `*[_type == "user" && userId == $userId][0]{
+    const { id } = req.user  // Extracted from the token (middleware)
+    console.log(id)
+
+    const query = `*[_type == "user" && id == $id][0]{
       _id,
       firstName,
       lastName,
       biologicalSex,
       preferredPronouns,
-      birthday,
+      birthday, 
       height,
       weight,
       bloodType,
@@ -22,35 +23,29 @@ export const getUserByUserId = async (req, res) => {
       currentMedications,
       medicalOperations,
       patientNotes,
-      userId
     }`
-    
-    const user = await client.fetch(query, { userId })
-    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' })
-    }
-    
+
+    const user = await client.fetch(query, { id })
+console.log(user)
+    if (!user) return res.status(404).json({ error: "User not found" })
+
     res.status(200).json(user)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch user' })
+    res.status(500).json({ error: "Failed to fetch user" })
   }
 }
 
 // Update user medical information
 export const updateUserMedicalInfo = async (req, res) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.user
     const medicalData = req.body
-    
-    // Find user by userId first
+
     const query = `*[_type == "user" && userId == $userId][0]{ _id }`
     const user = await client.fetch(query, { userId })
-    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' })
-    }
-    
+
+    if (!user) return res.status(404).json({ error: "User not found" })
+
     const updatedUser = await client
       .patch(user._id)
       .set({
@@ -61,27 +56,24 @@ export const updateUserMedicalInfo = async (req, res) => {
         patientNotes: medicalData.patientNotes || []
       })
       .commit()
-    
+
     res.status(200).json(updatedUser)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update medical information' })
+    res.status(500).json({ error: "Failed to update medical information" })
   }
 }
 
 // Update user basic information
 export const updateUserBasicInfo = async (req, res) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.user
     const basicData = req.body
-    
-    // Find user by userId first
+
     const query = `*[_type == "user" && userId == $userId][0]{ _id }`
     const user = await client.fetch(query, { userId })
-    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' })
-    }
-    
+
+    if (!user) return res.status(404).json({ error: "User not found" })
+
     const updatedUser = await client
       .patch(user._id)
       .set({
@@ -95,27 +87,24 @@ export const updateUserBasicInfo = async (req, res) => {
         bloodType: basicData.bloodType
       })
       .commit()
-    
+
     res.status(200).json(updatedUser)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update basic information' })
+    res.status(500).json({ error: "Failed to update basic information" })
   }
 }
 
 // Update user contact information
 export const updateUserContactInfo = async (req, res) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.user
     const contactData = req.body
-    
-    // Find user by userId first
+
     const query = `*[_type == "user" && userId == $userId][0]{ _id }`
     const user = await client.fetch(query, { userId })
-    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' })
-    }
-    
+
+    if (!user) return res.status(404).json({ error: "User not found" })
+
     const updatedUser = await client
       .patch(user._id)
       .set({
@@ -129,34 +118,28 @@ export const updateUserContactInfo = async (req, res) => {
         }
       })
       .commit()
-    
+
     res.status(200).json(updatedUser)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update contact information' })
+    res.status(500).json({ error: "Failed to update contact information" })
   }
 }
 
 // Complete user profile update (all sections)
 export const updateUserProfile = async (req, res) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.user
     const profileData = req.body
-    
-    // Find user by userId first
+
     const query = `*[_type == "user" && userId == $userId][0]{ _id }`
     const user = await client.fetch(query, { userId })
-    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' })
-    }
-    
-    const updatedUser = await client
-      .patch(user._id)
-      .set(profileData)
-      .commit()
-    
+
+    if (!user) return res.status(404).json({ error: "User not found" })
+
+    const updatedUser = await client.patch(user._id).set(profileData).commit()
+
     res.status(200).json(updatedUser)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update user profile' })
+    res.status(500).json({ error: "Failed to update user profile" })
   }
 }
