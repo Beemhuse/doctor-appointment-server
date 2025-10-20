@@ -7,6 +7,8 @@ import appointmentRoutes from './routes/appointment.routes.js';
 import doctorRoutes from './routes/doctor.routes.js';
 import userRoutes from './routes/user.routes.js';
 import { swaggerSpec } from './swagger.js';
+import propertyRoutes from "./routes/property.routes.js";
+import contactRoutes from "./routes/contact.routes.js";
 
 
 dotenv.config();
@@ -22,6 +24,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/user', userRoutes);
+app.use("/api/properties", propertyRoutes);
+app.use("/api/contact", contactRoutes);
 
 
 // Swagger
