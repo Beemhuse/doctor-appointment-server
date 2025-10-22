@@ -26,7 +26,7 @@ export const getUserProfile = async (req, res) => {
     }`
 
     const user = await client.fetch(query, { id })
-console.log(user)
+    console.log(user)
     if (!user) return res.status(404).json({ error: "User not found" })
 
     res.status(200).json(user)
@@ -128,18 +128,37 @@ export const updateUserContactInfo = async (req, res) => {
 // Complete user profile update (all sections)
 export const updateUserProfile = async (req, res) => {
   try {
-    const { id } = req.user
-    const profileData = req.body
+    const { id } = req.user;
+    const profileData = req.body;
 
-    const query = `*[_type == "user" && _id == $id][0]{ _id }`
-    const user = await client.fetch(query, { id })
+    // Fetch the user by ID
+    const query = `*[_type == "user" && _id == $id][0]{ _id, is_profile_complete }`;
+    const user = await client.fetch(query, { id });
 
-    if (!user) return res.status(404).json({ error: "User not found" })
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    const updatedUser = await client.patch(user._id).set(profileData).commit()
+    // If profile is already complete, prevent further updates
+    if (user.is_profile_complete) {
+      return res.status(400).json({
+        message: "Profile is already complete. No further updates allowed.",
+      });
+    }
 
-    res.status(200).json(updatedUser)
+    // Proceed with update and mark as complete
+    const updatedUser = await client
+      .patch(user._id)
+      .set({
+        ...profileData,
+        is_profile_complete: true,
+      })
+      .commit();
+
+    return res.status(200).json({
+      message: "Profile updated successfully.",
+      user: updatedUser,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Failed to update user profile" })
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ error: "Failed to update user profile" });
   }
-}
+};

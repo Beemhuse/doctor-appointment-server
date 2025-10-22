@@ -10,24 +10,24 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:4000/api', // 👈 your base path here
+        url: 'http://localhost:4000/api',
         description: 'Local development server',
       },
       {
-        url: 'https://doctor-appointment-server-jm1p.onrender.com/api', // optional production base path
+        url: 'https://doctor-appointment-server-jm1p.onrender.com/api',
         description: 'Production server',
       },
     ],
     components: {
       securitySchemes: {
-        BearerAuth: {
+        bearerAuth: { // 👈 match this exactly
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
         },
       },
     },
-    security: [{ BearerAuth: [] }],
+    security: [{ bearerAuth: [] }], // 👈 match here too
   },
   apis: ['./src/routes/*.js', './src/controllers/*.js'],
 };
