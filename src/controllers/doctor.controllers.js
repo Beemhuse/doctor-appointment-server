@@ -4,6 +4,23 @@ import imageUrlBuilder from "@sanity/image-url";
 const builder = imageUrlBuilder(client);
 const urlFor = (source) => builder.image(source);
 
+async function uploadImageFromUrl(imageUrl) {
+  try {
+    // Fetch the image
+    const response = await fetch(imageUrl);
+    const buffer = await response.arrayBuffer();
+
+    // Upload to Sanity
+    const asset = await client.assets.upload('image', Buffer.from(buffer), {
+      filename: imageUrl.split('/').pop()
+    });
+
+    return asset;
+  } catch (error) {
+    console.error("Image upload error:", error);
+    throw error;
+  }
+}
 /**
  * @desc Create a new doctor
  * @route POST /api/doctors
@@ -17,22 +34,79 @@ export const createDoctor = async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
+    let processedData = { ...doctorData };
+
+    // Handle image data
+    if (doctorData.image) {
+      if (typeof doctorData.image === 'string') {
+        // If it's a URL, upload it to Sanity first
+        try {
+          const asset = await uploadImageFromUrl(doctorData.image);
+          processedData.image = {
+            _type: 'image',
+            asset: {
+              _type: 'reference',
+              _ref: asset._id
+            },
+            hotspot: {
+              x: 0.5,
+              y: 0.5,
+              height: 1,
+              width: 1
+            },
+            crop: {
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0
+            }
+          };
+        } catch (uploadError) {
+          console.error("Failed to upload image:", uploadError);
+          delete processedData.image;
+        }
+      } else if (doctorData.image.asset && doctorData.image.asset._ref) {
+        // If it's already a Sanity image reference, use it as is
+        processedData.image = {
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: doctorData.image.asset._ref
+          },
+          hotspot: doctorData.image.hotspot || {
+            x: 0.5,
+            y: 0.5,
+            height: 1,
+            width: 1
+          },
+          crop: doctorData.image.crop || {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
+        };
+      }
+    }
+
     const newDoctor = await client.create({
       _type: "doctor",
-      ...doctorData,
+      ...processedData,
       createdAt: new Date().toISOString(),
     });
 
-    // Format the response with image URL
-    newDoctor.image = newDoctor.image ? urlFor(newDoctor.image).url() : null;
+    // Format response with URL for frontend
+    const responseDoctor = {
+      ...newDoctor,
+      imageUrl: newDoctor.image ? urlFor(newDoctor.image).url() : null
+    };
 
-    res.status(201).json(newDoctor);
+    res.status(201).json(responseDoctor);
   } catch (error) {
     console.error("Create doctor error:", error);
     res.status(500).json({ error: "Failed to create doctor" });
   }
 };
-
 /**
  * @desc Update a doctor
  * @route PUT /api/doctors/:id
@@ -114,7 +188,7 @@ export const getAllDoctors = async (req, res) => {
       isActive,
       slug
     }`;
-    
+
     const doctors = await client.fetch(query);
 
     const formattedDoctors = doctors.map((doctor) => ({
@@ -164,7 +238,7 @@ export const getDoctorById = async (req, res) => {
       _createdAt,
       _updatedAt
     }`;
-    
+
     const doctor = await client.fetch(query, { id });
 
     if (!doctor) {
@@ -208,7 +282,7 @@ export const getDoctorsBySpecialization = async (req, res) => {
       isActive,
       slug
     }`;
-    
+
     const doctors = await client.fetch(query, { specialization });
 
     const formattedDoctors = doctors.map((doctor) => ({
@@ -250,7 +324,7 @@ export const getDoctorsByHospital = async (req, res) => {
       isActive,
       slug
     }`;
-    
+
     const doctors = await client.fetch(query, { hospital });
 
     const formattedDoctors = doctors.map((doctor) => ({
@@ -292,7 +366,7 @@ export const searchDoctors = async (req, res) => {
       isActive,
       slug
     }`;
-    
+
     const doctors = await client.fetch(searchQuery, { query: `*${query}*` });
 
     const formattedDoctors = doctors.map((doctor) => ({
