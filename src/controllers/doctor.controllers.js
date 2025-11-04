@@ -30,7 +30,7 @@ export const createDoctor = async (req, res) => {
   try {
     const doctorData = req.body;
 
-    if (req.user.role !== "ADMIN") {
+    if (req.user.role.toLowerCase() !== "admin") {
       return res.status(403).json({ error: "Access denied" });
     }
 
@@ -116,7 +116,7 @@ export const updateDoctor = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (req.user.role !== "ADMIN") {
+    if (req.user.role.toLowerCase() !== "admin") {
       return res.status(403).json({ error: "Access denied" });
     }
 
@@ -150,7 +150,7 @@ export const deleteDoctor = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (req.user.role !== "ADMIN") {
+    if (req.user.role.toLowerCase() !== "admin") {
       return res.status(403).json({ error: "Access denied" });
     }
 
