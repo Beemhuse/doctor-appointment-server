@@ -81,7 +81,7 @@ router.use(authenticate);
  *                 type: number
  *               bio:
  *                 type: string
- *               imageUrl:
+ *               image:
  *                 type: string
  *     responses:
  *       201:
