@@ -81,6 +81,8 @@ router.use(authenticate);
  *                 type: number
  *               bio:
  *                 type: string
+ *               imageUrl:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Doctor created
