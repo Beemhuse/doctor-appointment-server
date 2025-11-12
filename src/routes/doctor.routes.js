@@ -33,13 +33,13 @@ router.get("/", getAllDoctors);
 
 /**
  * @swagger
- * /doctors/{doctorId}:
+ * /doctors/{id}:
  *   get:
  *     summary: Get a doctor by ID
  *     tags: [Doctors]
  *     parameters:
  *       - in: path
- *         name: doctorId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -95,7 +95,7 @@ router.post("/", createDoctor);
 
 /**
  * @swagger
- * /doctors/{doctorId}:
+ * /doctors/{id}:
  *   put:
  *     summary: Update doctor information
  *     tags: [Doctors]
@@ -103,7 +103,7 @@ router.post("/", createDoctor);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: doctorId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -130,7 +130,7 @@ router.put("/:id", updateDoctor);
 
 /**
  * @swagger
- * /doctors/{doctorId}:
+ * /doctors/{id}:
  *   delete:
  *     summary: Delete a doctor
  *     tags: [Doctors]
@@ -138,7 +138,7 @@ router.put("/:id", updateDoctor);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: doctorId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -150,6 +150,6 @@ router.put("/:id", updateDoctor);
  *       404:
  *         description: Doctor not found
  */
-router.delete("/:doctorId", deleteDoctor);
+router.delete("/:id", deleteDoctor);
 
 export default router;
